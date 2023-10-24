@@ -1,0 +1,167 @@
+.container {
+   margin: 50px;
+}
+
+.title h1 {
+   font-size: 20px;
+   padding-bottom: 30px;
+}
+
+.search_box {
+   border: none;
+   outline: solid 1px rgb(108, 108, 108);
+   font-size: 10px;
+   padding: 5px 10px;
+   width: 200px;
+}
+
+
+.search select {
+   margin-left: 20px;
+}
+
+.search button {
+   width: 50px;
+   background-color: white;
+   margin-left: 20px;
+}
+
+
+/*listの表*/
+.list{
+   margin-top: 50px;
+}
+
+.list table, .add_list, .detail_container, .edit_container{
+   outline: solid 1px black;
+}
+.add_list, .detail_container, .edit_container{
+   width: 50%;
+}
+
+td, th{
+   height: 50px;
+}
+
+.list td{
+   border-top: solid 1px rgb(184, 184, 184);
+   padding-top: 10px;
+   padding-bottom: 10px;
+}
+
+.product_id {
+   width: 40px;
+   text-align: center;
+}
+
+.product {
+   width: 100px;
+   text-align: center;
+}
+
+.product img {
+   width: 60px;
+}
+
+.product_button {
+   padding-left: 10px;
+   padding-right: 10px;
+   width: 100px;
+}
+
+/*listの表*/
+/*ボタンの設定*/
+.add_button {
+   border: solid 1px black;
+   font-size: 15px;
+   background-color: rgb(255, 143, 45);
+   padding: 5px;
+   margin-left: 25%;
+}
+
+.blue_button {
+   font-size: 15px;
+   background-color: rgb(139, 224, 255);
+   padding: 2px 15px;
+   border: solid 1px black;
+}
+
+.red_button {
+   font-size: 15px;
+   background-color: rgb(255, 78, 55);
+   color: white;
+   padding: 2px 15px;
+   border: solid 1px black;
+}
+
+.orange_button {
+   border: solid 1px black;
+   font-size: 14px;
+   background-color: rgb(255, 143, 45);
+   padding:2px 12px;
+}
+
+.set_button {
+   padding: 20px;
+}
+
+.space {
+   margin-left: 20px;
+}
+
+.required {
+   color: red;
+}
+
+/*新規登録画面*/
+
+.add_title,
+.update_title {
+   text-align: left;
+   padding-left: 20px;
+}
+.update_title{
+   font-weight: normal;
+}
+.add_list td{
+   margin-right: 500px;
+}
+.add_box,
+.update_box {
+   border: none;
+   margin-left: 25px;
+   margin-right: 20px;
+   outline: solid 1px rgb(221, 221, 221);
+   font-size: 12px;
+   width: 200px;
+   color: gray;
+}
+
+.add_img {
+   margin-left: 20px;
+   font-size: 10px;
+   width: 200px;
+}
+
+/*エラーメッセージ*/
+.error {
+   color: rgb(255, 97, 97);
+   padding-left: 40px;
+   font-size: 10px;
+   text-align: left;
+}
+
+.detail_box {
+   text-align: left;
+   font-size: 15px;
+   padding-left: 50px;
+   font-weight: normal;
+}
+
+.detail_img {
+   padding-left: 50px;
+}
+
+.detail_img img {
+   width: 140px;
+}
