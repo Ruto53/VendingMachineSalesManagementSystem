@@ -36,8 +36,8 @@
                         <tr>
                             <th class="update_title"><label for="product_name">商品名<span class="required"
                                         style="color:red">*</span></label></th>
-                            <th><input type="text" name="product_name" id="product_name" placeholder="コーラ"
-                                    value="{{ old('product_name') }}" class="update_box">
+                            <th><input type="text" name="product_name" id="product_name"
+                                    value="{{ old('product_name', $product -> product_name ) }}" class="update_box">
                                 @if ($errors -> has('product_name'))
                                 <p class="error">{{ $errors->first('product_name') }}</p>
                                 @endif
@@ -47,21 +47,21 @@
                             <th class="update_title"><label for="company_id">メーカー名<span class="required"
                                         style="color:red">*</span></label></th>
                             <th><select name="company_id" id="company_id" class="update_box">
-                                    <option value="null" hidden>選択してください</option>
-                                    @foreach ($companies as $company)
+                                @foreach ($companies as $company)
+                                    <option value="{{ $product->company_id}}" hidden>{{ $product->company->company_name }}</option>
                                     <option value="{{$company->id}}">{{$company->company_name}}</option>
                                     @endforeach
                                 </select>
-                                @if ($errors -> has('company_name'))
-                                <p class="error">{{ $errors->first('company_name') }}</p>
+                                @if ($errors -> has('company_id'))
+                                <p class="error">{{ $errors->first('company_id') }}</p>
                                 @endif
                             </th>
                         </tr>
                         <tr>
                             <th class="update_title"><label for="price">価格<span class="required"
                                         style="color:red">*</span></label></th>
-                            <th><input type="number" name="price" id="price" placeholder="100" step="10"
-                                    value="{{ old('price') }}" class="update_box">
+                            <th><input type="number" name="price" id="price" step="10"
+                                    value="{{ old('price', $product -> price) }}" class="update_box">
                                 @if ($errors -> has('price'))
                                 <p class="error">{{ $errors->first('price') }}</p>
                                 @endif
@@ -70,9 +70,9 @@
                         <tr>
                             <th class="update_title"><label for="stock">在庫数<span class="required"
                                         style="color:red">*</span></label></th>
-                            <th><input type="number" name="stock" id="stock" placeholder="10" value="{{ old('stock') }}"
+                            <th><input type="number" name="stock" id="stock" value="{{ old('stock', $product -> stock) }}"
                                     class="update_box">
-                                @if ($errors -> has('stock'))
+                                @if ($errors -> has('stock', $product -> stock))
                                 <p class="error">{{ $errors->first('stock') }}</p>
                                 @endif
                             </th>
@@ -80,7 +80,7 @@
                         <tr>
                             <th class="update_title"><label for="comment">コメント</label></th>
                             <th><textarea name="comment" id="comment" cols="30" rows="2"
-                                    class="update_box">{{ old('comment') }}</textarea>
+                                    class="update_box">{{ old('comment', $product -> comment) }}</textarea>
                                 @if ($errors -> has('comment'))
                                 <p class="error">{{ $errors->first('comment') }}</p>
                                 @endif
