@@ -28,11 +28,11 @@ Route::get('add', [App\Http\Controllers\ProductController::class, 'addList'])->n
 Route::post('add', [App\Http\Controllers\ProductController::class, 'addSubmit'])->name('submit');
 
 //削除を行う処理
-Route::post('delete{id}',[App\Http\Controllers\ProductController::class, 'delete'])->name('delete');
+Route::post('delete',[App\Http\Controllers\ProductController::class, 'delete'])->name('delete');
 
 //詳細ボタンクリック時
-Route::get('detail{id}', [App\Http\Controllers\ProductController::class, 'detail'])->name('detail');
-Route::post('detail{id}', [App\Http\Controllers\ProductController::class, 'detail'])->name('detail');
+Route::get('detail', [App\Http\Controllers\ProductController::class, 'detail'])->name('detail');
+Route::post('detail', [App\Http\Controllers\ProductController::class, 'detail'])->name('detail');
 
 //編集ボタンクリック時
 Route::get('edit{id}', [App\Http\Controllers\ProductController::class, 'edit'])->name('edit');

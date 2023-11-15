@@ -7,9 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 use App\Controllers\ArticleController;
+use Kyslik\ColumnSortable\Sortable; 
 
 class Product extends Model
 {
+    use Sortable;
+
     //companyとリレーション（多対1）
     public function company() {
         return $this -> belongsTo(Company::Class);
@@ -19,29 +22,52 @@ class Product extends Model
     public function sales() {
         return $this-> hasMany(Sales::Class);
     }
+    
+    //検索機能
+    public function searchProduct($key, $op, $min, $max) {
+        $query_products = Product::query();
+        $query_companies = Company::query();
 
-    public function searchProduct($key, $op) {
-        if (!empty($key)) {//keyが空でない場合に処理を実行
-            $products = Product::where('product_name', 'LIKE', "%{$key}%")
+        if(!empty($min) && !empty($max)){
+            //下限と上限が入力されている状態
+            $query_products -> whereBetween('price',[$min, $max]);
+        }else if(!empty($min) && empty($max)){
+            //下限のみが入力されている状態
+            $query_products -> where ('price', '>=', $min);
+        }else if(empty($min) && !empty($max)){
+            //上限のみが入力されている状態
+            $query_products -> where ('price', '<=', $max);
+        }
+        
+        if(!empty($key) && !empty($op)){
+            $query_products -> whereHas('company', function($query) use ($op) {
+                $query -> where('company_name' , $op);
+             })
+            ->where('product_name', 'LIKE', "%{$key}%")
              ->orWhere('price', $key)
              ->orWhere('stock', $key)
              ->orWhereHas('company', function($query) use ($key) {
                 $query->where('company_name', 'LIKE' , $key);
-             })->paginate(10);
-             $companies = Company :: paginate(10);
-             return [$products, $companies];
-             
+             });
+        }else if (!empty($key)) {//keyが空でない場合に処理を実行
+            $query_products -> where('product_name', 'LIKE', "%{$key}%")
+             ->orWhere('price', $key)
+             ->orWhere('stock', $key)
+             ->orWhereHas('company', function($query) use ($key) {
+                $query->where('company_name', 'LIKE' , $key);
+             });
         } else if (!empty($op)) {//$op　が空ではない場合、検索処理を実行します
-            $products = Product::whereHas('company', function($query) use ($op) {
+            $query_products -> whereHas('company', function($query) use ($op) {
                 $query -> where('company_name' , $op);
-             }) -> paginate(10);
-             $companies = Company :: paginate(10);
-             return [$products, $companies];
-        } else if (empty($key) && empty($op)) {//なにも検索するものが無い場合に実行
-            $products = Product::paginate(10);
-            $companies = Company :: paginate(10);
-            return [$products, $companies];
+             });
         }
+
+        
+
+
+        $products = $query_products-> paginate(10);//$productsに検索したデータを代入
+        $companies = $query_companies -> paginate(10);//$companiesに検索したデータを代入
+        return [$products, $companies];
     }
 
     //DBへ新規登録

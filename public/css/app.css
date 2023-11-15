@@ -35,6 +35,9 @@
 .list table, .add_list, .detail_container, .edit_container{
    outline: solid 1px black;
 }
+.edit_container{
+   height: 400px;
+}
 .add_list, .detail_container, .edit_container{
    width: 50%;
 }
@@ -164,4 +167,17 @@ td, th{
 
 .detail_img img {
    width: 140px;
+}
+
+/*数値検索*/
+.price_search{
+   margin:15px 0px;
+}
+.string_box{
+   width : 80px;
+}
+
+.editbttpn{
+   float: left;
+   margin-left: 20px;
 }

@@ -24,15 +24,16 @@
             <h1>商品情報編集画面</h1>
         </div>
         <div class="edit_container">
+            <form action=" {{ route('update', ['id'=>$product->id]) }}" enctype="multipart/form-data"
+                method="post">
+                @csrf
             <table>
                 <tbody>
                     <tr>
                         <th class="update_title">ID</th>
                         <th class="detail_box">{{ $product -> id }}.</th>
                     </tr>
-                    <form action=" {{ route('update', ['id'=>$product->id]) }}" enctype="multipart/form-data"
-                        method="post">
-                        @csrf
+
                         <tr>
                             <th class="update_title"><label for="product_name">商品名<span class="required"
                                         style="color:red">*</span></label></th>
@@ -93,13 +94,16 @@
 
                 </tbody>
             </table>
-            <div class="set_button">
-                <button type="submit" class="orange_button">更新</button>
-                <a href="{{ route('detail',['id'=>$product -> id]) }}" class="blue_button space">戻る</a>
-            </div>
+            <button type="submit" class="orange_button editbttpn">更新</button>
+        </form>
+                    <form action="{{ route('detail') }}" method="post">
+                    @csrf
+                    <input type="hidden" name="product_id" value="{{$product->id}}">
+                    <button type="submit" class="blue_button space editbttpn">戻る</button>
+                </form>
         </div>
 
-        </form>
+        
 
     </div>
     </div>

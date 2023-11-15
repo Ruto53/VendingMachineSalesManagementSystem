@@ -13,12 +13,13 @@ class ProductController extends Controller
     //ログイン後の画面表示
     public function showList() {
         //全テーブルのレコードを取得
-        $products = Product :: paginate(10);
+        $products = Product ::sortable()-> paginate(10);
         $companies = Company :: paginate(10);
         return view('list', ['products' => $products, 'companies' => $companies]);
     }
 
     //検索機能
+    /*
     public function search(Request $request) {
         $keyword = $request ->keyword;
         $option = $request ->company;
@@ -27,6 +28,23 @@ class ProductController extends Controller
         list($products, $companies)=$model->searchProduct($keyword, $option);
 
         return view('list', ['products' => $products, 'companies' => $companies]);
+    }
+    */
+    //検索機能（非同期）
+    public function search() {
+        $keyword = request() -> get('keyword');
+        $option = request() -> get('company');
+        $min_price = request() -> get('min_price');
+        $max_price = request() -> get('max_price');
+
+        $model = new Product;
+        list($products, $companies) = $model->searchProduct($keyword, $option, $min_price, $max_price);
+
+        $relation_company = array();
+        foreach ($products as $product){
+            $relation_company[]  = $product->company->company_name;
+        }
+        return response() -> json(['products' => $products, 'companies' => $relation_company]);
     }
     
     //新規追加画面表示
@@ -52,17 +70,27 @@ class ProductController extends Controller
         
         return redirect(route('add'));
     }
-
+    /*
     //削除処理
-    public function delete($id) {
+    public function delete(Request $request) {
+        $id = $request -> product_id;
         $product = Product::find( $id );
         //レコードを削除
         $product -> delete();
         return redirect(route('list'));
     }
+    */
+    //削除処理非同期
+    public function delete() {
+        $id = request() -> get('id');
+        $product = Product::find( $id );
+        //レコードを削除
+        $product -> delete();
+    }
 
     //詳細を表示
-    public function detail($id) {
+    public function detail(Request $request) {
+        $id = $request -> product_id;
         $product = Product::find( $id );
             
         return view('detail',['product' => $product]);
