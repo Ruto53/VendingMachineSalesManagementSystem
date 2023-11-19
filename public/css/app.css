@@ -170,7 +170,7 @@ td, th{
 }
 
 /*数値検索*/
-.price_search{
+.price_search, .stock_search{
    margin:15px 0px;
 }
 .string_box{
@@ -180,4 +180,32 @@ td, th{
 .editbttpn{
    float: left;
    margin-left: 20px;
+}
+
+.price_search input{
+   background-color: rgb(233, 255, 236);
+}
+
+.stock_search input{
+   background-color: rgb(255, 252, 236);
+}
+
+/*ソートのスタイル*/
+
+#fav_table th {
+   padding-left: 30px;
+}
+.tablesorter-headerUnSorted {
+   background-repeat: no-repeat;
+   background-position: center right;
+}
+.tablesorter-headerAsc {
+   background-repeat: no-repeat;
+   background-position: center right;
+   border-bottom: #000 2px solid;
+}
+.tablesorter-headerDesc {
+   background-repeat: no-repeat;
+   background-position: center right;
+   border-bottom: #000 2px solid;
 }

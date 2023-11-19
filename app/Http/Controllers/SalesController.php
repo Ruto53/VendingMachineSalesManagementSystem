@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Sales;
-
 use Illuminate\Support\Facades\DB; 
+
 class SalesController extends Controller
 {
     /*//API処理を作成
@@ -30,14 +30,20 @@ class SalesController extends Controller
             return response() -> json(['message' => 'Item is out of stock.'], 400);
         }
 
+        //トランザクション開始
+        DB::beginTransaction();
+        try{
         $product -> stock -= $quantity;//Producテーブルのstockの値を減少させて保存
         $product -> save();
 
-
         $sale = new Sales;
         $sale -> addPurchase($id);
+        DB::commit();//トランザクションの処理を確定
+        } catch(\Exception $e) {
+            DB::rollback();
+            return back();
+        }
         return response() -> json(['message' => 'Purchase Success']);
-
     }
 
 }

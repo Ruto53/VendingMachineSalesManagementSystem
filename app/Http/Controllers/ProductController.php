@@ -13,7 +13,7 @@ class ProductController extends Controller
     //ログイン後の画面表示
     public function showList() {
         //全テーブルのレコードを取得
-        $products = Product ::sortable()-> paginate(10);
+        $products = Product :: paginate(10);
         $companies = Company :: paginate(10);
         return view('list', ['products' => $products, 'companies' => $companies]);
     }
@@ -36,9 +36,11 @@ class ProductController extends Controller
         $option = request() -> get('company');
         $min_price = request() -> get('min_price');
         $max_price = request() -> get('max_price');
+        $min_stock = request() -> get('min_stock');
+        $max_stock = request() -> get('max_stock');
 
         $model = new Product;
-        list($products, $companies) = $model->searchProduct($keyword, $option, $min_price, $max_price);
+        list($products, $companies) = $model->searchProduct($keyword, $option, $min_price, $max_price, $min_stock, $max_stock);
 
         $relation_company = array();
         foreach ($products as $product){

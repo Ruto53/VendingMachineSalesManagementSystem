@@ -17,8 +17,6 @@
         }
     </style>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <!--テーブルソートの実行するための読み込み-->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.0/js/jquery.tablesorter.min.js"></script>
     <!--ajaxのリクエスト時に利用するCSRFトークン-->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
@@ -43,9 +41,9 @@
                 </div>
                 <!--価格検索ここから-->
                 <div class="price_search">
-                    <input type="number" name="search_min_price" placeholder="下限価格" class="search_box string_box green_search"> 
+                    <input type="number" name="search_min_price" placeholder="下限価格" class="search_box string_box"> 
                     <p>{{__('~')}}</p>
-                    <input type="number" name="search_max_price" placeholder="上限価格" class="search_box string_box green_search">
+                    <input type="number" name="search_max_price" placeholder="上限価格" class="search_box string_box">
                 </div>
                 <!--価格検索ここまで-->
                 <!--在庫検索ここから-->
@@ -61,15 +59,15 @@
         <!--検索機能はここまで-->
 
         <div class="list">
-            <table class="product_table" id="fav_table">
+            <table>
                 <thead>
                     <tr>
-                        <th class="product_id">ID</th>
+                        <th class="product_id">@sortablelink('id', 'ID')</th>
                         <th class="product">商品画像</th>
-                        <th class="product">商品名</th>
-                        <th class="product">価格</th>
-                        <th class="product">在庫数</th>
-                        <th class="product">メーカー名</th>
+                        <th class="product">@sortablelink('product_name', '商品名')</th>
+                        <th class="product">@sortablelink('price', '価格')</th>
+                        <th class="product">@sortablelink('stock', '在庫数')</th>
+                        <th class="product">@sortablelink('company.company_name', 'メーカー名')</th>
                         <th class="product_button" colspan="2"><a href="add" class="add_button">新規登録</a></th>
                     </tr>
                 </thead>
@@ -107,42 +105,18 @@
     </div>
     <!--非同期処理-->
     <script>
-            $(function() {
-        //クリックイベント関数
-        function clickEvent(){
-            //検索ボタンのクリックイベント
-            $('#search_button').on('click', function(){
-                $('#list_table').empty(); //もともとある要素を空にする
-                let keyword = $('input[name = "keyword"]').val();
-                let company = $('select[name = "company"]').val();
-                let min_price = $('input[name = "search_min_price"]').val();
-                let max_price = $('input[name = "search_max_price"]').val();
-                let min_stock = $('input[name = "search_min_stock"]').val();
-                let max_stock = $('input[name = "search_max_stock"]').val();
-                //ajax
-                searchProduct(keyword, company, min_price, max_price, min_stock, max_stock);
-            });
-
-            //削除ボタンのクリックイベント
-            $('.delete_button').on('click', function(){
-                let clickEle = $(this);//クリックしたボタンの要素を取得
-                let id = clickEle.attr('value');//クリックしたボタンのvalueを取得＝id
-                //ajax
-                deleteProduct(id,clickEle);
-            });
-        }
-        
-
-        clickEvent();
-        //ソート機能
-        $('#fav_table').tablesorter();
-
-
-        //検索処理の関数
-        function searchProduct(keyword, company, min_price, max_price, min_stock, max_stock){
-            $.ajaxSetup({
+        $.ajaxSetup({
             headers: { 'X-CSRF-TOKEN': $("[name='csrf-token']").attr("content") },
         })
+        $('#search_button').on('click', function(){
+            $('#list_table').empty(); //もともとある要素を空にする
+            let keyword = $('input[name = "keyword"]').val();
+            let company = $('select[name = "company"]').val();
+            let min_price = $('input[name = "search_min_price"]').val();
+            let max_price = $('input[name = "search_max_price"]').val();
+            let min_stock = $('input[name = "search_min_stock"]').val();
+            let max_stock = $('input[name = "search_max_stock"]').val();
+
             $.ajax({
                 url: "{{ route('search') }}",
                 method: "POST",
@@ -175,36 +149,29 @@
                         </tr>
                             `;
                     $('#list_table').append(html);
-
                 }
-                clickEvent();
-                //ヘッダーをアップデート
-                $("#fav_table").trigger("update");
+                
             }).faile(function(){
                 alert('通信の失敗をしました');
-                clickEvent();
             });
-        }
+        });
 
-    //削除処理の関数
-    function deleteProduct(id,clickEle){
-        $.ajaxSetup({
-            headers: { 'X-CSRF-TOKEN': $("[name='csrf-token']").attr("content") },
-        })
+        $('.delete_button').on('click', function(){
+            console.log('hehe');
+            let clickEle = $(this);//クリックしたボタンの要素を取得
+            let id = clickEle.attr('value');//クリックしたボタンのvalueを取得＝id
             $.ajax({
                 url: "{{ route('delete') }}",
                 method: "POST",
                 data: { 'id' : id },
             }).done(function(res){
                 clickEle.parents('tr').remove();
-                clickEvent();
             }).faile(function(){
                 alert('通信の失敗をしました');
-                clickEvent();
             });
-    }
-})
+        });
     </script>
+
 </body>
 
 </html>

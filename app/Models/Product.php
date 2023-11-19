@@ -7,11 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 use App\Controllers\ArticleController;
-use Kyslik\ColumnSortable\Sortable; 
 
 class Product extends Model
 {
-    use Sortable;
 
     //companyとリレーション（多対1）
     public function company() {
@@ -24,7 +22,7 @@ class Product extends Model
     }
     
     //検索機能
-    public function searchProduct($key, $op, $min, $max) {
+    public function searchProduct($key, $op, $min, $max, $minstk, $maxstk) {
         $query_products = Product::query();
         $query_companies = Company::query();
 
@@ -37,6 +35,17 @@ class Product extends Model
         }else if(empty($min) && !empty($max)){
             //上限のみが入力されている状態
             $query_products -> where ('price', '<=', $max);
+        }
+
+        if(!empty($minstk) && !empty($maxstk)){
+            //下限と上限が入力されている状態
+            $query_products -> whereBetween('stock',[$minstk, $maxstk]);
+        }else if(!empty($minstk) && empty($maxstk)){
+            //下限のみが入力されている状態
+            $query_products -> where ('stock', '>=', $minstk);
+        }else if(empty($minstk) && !empty($maxstk)){
+            //上限のみが入力されている状態
+            $query_products -> where ('stock', '<=', $maxstk);
         }
         
         if(!empty($key) && !empty($op)){
